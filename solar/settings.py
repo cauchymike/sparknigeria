@@ -34,7 +34,7 @@ SECRET_KEY = environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'mike-trade.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'sparknigeria.herokuapp.com']
 
 APP_URL = environ.get('APP_URL')
 
