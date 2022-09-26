@@ -16,6 +16,7 @@ from os import environ, path
 from datetime import timedelta
 from django.conf import settings
 import django_heroku
+import dj_database_url
 
 
 pymysql.install_as_MySQLdb()
@@ -126,6 +127,12 @@ DATABASES = {
     }
 
 }
+
+
+DATABASES['default'] = dj_database_url.config(
+    default= environ.get('CLEARDB_DATABASE_URL'),
+)
+DATABASES['default']['OPTIONS'] = {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
 
 
 # Password validation
