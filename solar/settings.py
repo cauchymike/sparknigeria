@@ -15,6 +15,8 @@ import pymysql
 from os import environ, path
 from datetime import timedelta
 from django.conf import settings
+import django_heroku
+
 
 pymysql.install_as_MySQLdb()
 
@@ -185,3 +187,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+django_heroku.settings(locals())
