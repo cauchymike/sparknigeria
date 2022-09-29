@@ -96,6 +96,8 @@ class AffliateDashboardView(APIView):
             model = Dashboard.objects.filter(affliateID__id = pk).values("affliateID__id", "affliateID__address", "affliateID__phonenumber", "affliateID__fullname",
             "sale_earnings", "earning_duration", "sale_type")
             items_detail = []
+            total_sum = 0
+            item_detail = {}
             
             for items in model:
                 affliate_id = items["affliateID__id"]
@@ -104,9 +106,14 @@ class AffliateDashboardView(APIView):
                 affliate_fullname = items["affliateID__fullname"]
                 sale_type = items["sale_type"]
                 affliate_address = items["affliateID__address"]
+                total_sum = sale_earnings + total_sum
                 item_detail = {"id": affliate_id, "sales_earnings":sale_earnings, "earning_duration":earning_duration,
-                "affliate_fullname":affliate_fullname, "sale_type": sale_type, "affliate_address":affliate_address}
+                "affliate_fullname":affliate_fullname, "sale_type": sale_type, "affliate_address":affliate_address,
+                }
                 items_detail.append(item_detail)
+            #"total_earnings":affliate_total_earnings, "total_sales": len(items_detail)
+            item_detail.update({"total_earnings":total_sum})
+            item_detail.update({"total_sales":len(items_detail)})
             responseData = {'data': items_detail, 'status': True}
         except Exception as e:
             responseData = {'message': str(e), 'status': True}
@@ -200,7 +207,7 @@ class IndividualLoginView(APIView):
             refresh = token['refresh']
             emailaddress = request.data['username']
             password = request.data['password']
-            record = IndividualInvestor.objects.filter(emailaddress=emailaddress).values(
+            record = IndividualInvestor.objects.filter(emailaddress=emailaddress).values("id",
             'emailaddress', 'firstname', 'lastname', 'about_us').first()
             
                 
@@ -233,7 +240,7 @@ class BusinessInvestorLoginView(APIView):
             refresh = token['refresh']
             emailaddress = request.data['username']
             password = request.data['password']
-            record = BusinessInvestor.objects.filter(emailaddress=emailaddress).values(
+            record = BusinessInvestor.objects.filter(emailaddress=emailaddress).values("id"
             'emailaddress', 'firstname', 'lastname', 'companyname', 'country', 'phonenumber').first()
             
                 
@@ -266,7 +273,7 @@ class AffliateLoginView(APIView):
             refresh = token['refresh']
             emailaddress = request.data['username']
             password = request.data['password']
-            record = Affliates.objects.filter(emailaddress=emailaddress).values(
+            record = Affliates.objects.filter(emailaddress=emailaddress).values("id",
             'emailaddress', 'fullname', 'address', 'fullname_kin', 'phonenumber','phonenumber_kin').first()
             
                 
@@ -298,7 +305,7 @@ class SponsorLoginView(APIView):
             refresh = token['refresh']
             emailaddress = request.data['username']
             password = request.data['password']
-            record = Sponsor.objects.filter(emailaddress=emailaddress).values(
+            record = Sponsor.objects.filter(emailaddress=emailaddress).values("id"
             'emailaddress', 'fullname', 'address', 'fullname_kin', 'phonenumber','phonenumber_kin').first()
             
                 
