@@ -34,7 +34,7 @@ SECRET_KEY = environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'mike-trade.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'sparknigeria.herokuapp.com']
 
 APP_URL = environ.get('APP_URL')
 
@@ -74,11 +74,13 @@ INSTALLED_APPS = [
     "solar_app.apps.SolarAppConfig",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8080'
+# ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]#change it to your frontend url
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]#change it to your frontend url
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
