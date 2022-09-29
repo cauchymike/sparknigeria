@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from datetime import datetime
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
@@ -48,6 +49,70 @@ class BusinessInvestorRegisterView(APIView):
             responseData = {'message': 'An error occur' +
                                        str(e), 'status': False}
             return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+class SaveEarninsView(APIView):
+    def post(self, request, format=None):
+        try:
+            print(request.data['date_of_sale'])
+            serializer = DashboardSerializer(data=request.data)
+            if serializer.is_valid():
+                
+                
+                try:
+                    valid_datetime = datetime.strptime(request.data['date_of_sale'], '%Y-%m-%d')
+                    serializer.save(date_of_sale= valid_datetime)
+                    responseData = {'message': 'Earnings created successfully',
+                                    'status': True}
+                    return HttpResponse(json.dumps(responseData), content_type="application/json")
+                except ValueError:
+                    responseData = {'message': 'Invalid date format',
+                                    'status': False}
+                    return HttpResponse(json.dumps(responseData), content_type="application/json")
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            responseData = {'message': 'An error occur' +
+                                       str(e), 'status': False}
+            return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+
+class AllAffliatesView(APIView):
+    def get(self, request, format=None):       
+        try:
+            affliate_list = Affliates.objects.all()
+            serializer = ListAffliatesSerializer(affliate_list, many = True) 
+            responseData = {'data': serializer.data, 'status': True}
+            return HttpResponse(json.dumps(responseData))
+        
+        except Exception as e:
+            return Response(str({e}))
+
+class AffliateDashboardView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None): 
+        pk = request.query_params["affliateID"]
+        try:
+            model = Dashboard.objects.filter(affliateID__id = pk).values("affliateID__id", "affliateID__address", "affliateID__phonenumber", "affliateID__fullname",
+            "sale_earnings", "earning_duration", "sale_type")
+            items_detail = []
+            
+            for items in model:
+                affliate_id = items["affliateID__id"]
+                sale_earnings = float(items["sale_earnings"])
+                earning_duration = items["earning_duration"]
+                affliate_fullname = items["affliateID__fullname"]
+                sale_type = items["sale_type"]
+                affliate_address = items["affliateID__address"]
+                item_detail = {"id": affliate_id, "sales_earnings":sale_earnings, "earning_duration":earning_duration,
+                "affliate_fullname":affliate_fullname, "sale_type": sale_type, "affliate_address":affliate_address}
+                items_detail.append(item_detail)
+            responseData = {'data': items_detail, 'status': True}
+        except Exception as e:
+            responseData = {'message': str(e), 'status': True}
+        return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+
 
 
 class IndividualInvestorRegisterView(APIView):
@@ -339,6 +404,27 @@ class PasswordRecovery(APIView):
                 'message': 'The record cannot be found',
                 'status': False
             }
+
+        try:
+            business_investor = BusinessInvestor.objects.get(emailaddress = uid)
+        except BusinessInvestor.DoesNotExist:
+            business_investor = None
+            responseData = {
+                'message': 'The record cannot be found',
+                'status': False
+            }
+
+        if business_investor:
+        
+            password = make_password(
+                request.data['password'], salt=None, hasher='default')
+            business_investor.password = password
+            business_investor.save(update_fields = ["password"])
+            responseData = {
+            'message': 'Password has been changed',
+            'status': True
+        }
+            return HttpResponse(json.dumps(responseData), content_type="application/json")
             
         if affliate:
             print('working')

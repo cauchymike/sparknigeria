@@ -34,6 +34,20 @@ class RegisterSponsorSerializer(serializers.ModelSerializer):
         model = Sponsor
         fields = "__all__"
 
+class DashboardSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Dashboard
+        fields = "__all__"
+
+class ListAffliatesSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Affliates
+        exclude = ('password',)
+
     
 
 

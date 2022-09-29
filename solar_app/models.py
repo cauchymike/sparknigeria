@@ -37,3 +37,13 @@ class Sponsor(models.Model):
     phonenumber_kin = models.CharField(max_length=45,null=True)
     password = models.CharField(max_length=250,default="")
 
+class Dashboard(models.Model):
+    date_of_sale = models.DateField()
+    sale_type = models.CharField(max_length=45,null=True)
+    sale_earnings = models.DecimalField(
+        default=0, max_digits=16, decimal_places=2)
+    earning_duration = models.CharField(max_length=45,null=True)
+    affliateID = models.ForeignKey(Affliates,on_delete=models.CASCADE,null=True) 
+
+    
+

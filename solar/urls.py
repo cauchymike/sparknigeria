@@ -32,7 +32,13 @@ urlpatterns = [
     path('api/affliatelogin/', AffliateLoginView.as_view(), name='login_affliate'),
     path('api/sponsorlogin/', SponsorLoginView.as_view(), name='login_sponsor'),
     path('api/affliaterecoverymail/',RecoverAffliatePassword.as_view(), name='affliate_password_recovery_mail'),
-    path('api/affliaterecoverpassword/',PasswordRecovery.as_view(), name='affliate_password_recovery_mail'),
-    path('api/sponsorrecoverymail/',RecoverSponsorPassword.as_view(), name='affliate_password_recovery_mail'),
+    path('api/businessinvestorrecoverymail/',RecoverBusinessInvestorPassword.as_view(), name='business_investor_recovery_mail'),
+    path('api/businessinvestorrecoverpassword/',PasswordRecovery.as_view(), name='business_investor_password_recovery'),
+    path('api/affliaterecoverpassword/',PasswordRecovery.as_view(), name='affliate_password_recovery'),
+    path('api/sponsorrecoverymail/',RecoverSponsorPassword.as_view(), name='sponsor_password_recovery_mail'),
+    path('api/affliates/',AllAffliatesView.as_view(), name='affliate_list'),
+    path('api/salesearnings/',SaveEarninsView.as_view(), name='earnings'),
+    path('api/dashboard/',AffliateDashboardView.as_view(), name='dashboard'),
+
 
 ]
