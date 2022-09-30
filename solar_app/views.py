@@ -94,7 +94,7 @@ class AffliateDashboardView(APIView):
         pk = request.query_params["affliateID"]
         try:
             model = Dashboard.objects.filter(affliateID__id = pk).values("affliateID__id", "affliateID__address", "affliateID__phonenumber", "affliateID__fullname",
-            "sale_earnings", "earning_duration", "sale_type")
+            "sale_earnings", "earning_duration", "sale_type", "date_of_sale")
             items_detail = []
             total_sum = 0
             item_detail = {}
@@ -103,18 +103,16 @@ class AffliateDashboardView(APIView):
 
             
             for items in model:
-                #affliate_id = items["affliateID__id"]
+                date_of_sale = items["date_of_sale"]
                 sale_earnings = float(items["sale_earnings"])
                 earning_duration = items["earning_duration"]
                 affliate_fullname = items["affliateID__fullname"]
                 sale_type = items["sale_type"]
-                #affliate_address = items["affliateID__address"]
                 total_sum = sale_earnings + total_sum
                 item_detail = {"sales_earnings":sale_earnings, "earning_duration":earning_duration,
                 "affliate_fullname":affliate_fullname, "sale_type": sale_type,
-                }
+                "date_of_sale":date_of_sale}
                 items_detail.append(item_detail)
-            #"total_earnings":affliate_total_earnings, "total_sales": len(items_detail)
             affliate_data["total_earnings"] = total_sum
             affliate_data["total_sales"] = len(items_detail)
             affliate_data["data"] = items_detail
