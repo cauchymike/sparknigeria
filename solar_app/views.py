@@ -98,22 +98,25 @@ class AffliateDashboardView(APIView):
             items_detail = []
             total_sum = 0
             item_detail = {}
+            totals = {}
+
             
             for items in model:
-                affliate_id = items["affliateID__id"]
+                #affliate_id = items["affliateID__id"]
                 sale_earnings = float(items["sale_earnings"])
                 earning_duration = items["earning_duration"]
                 affliate_fullname = items["affliateID__fullname"]
                 sale_type = items["sale_type"]
-                affliate_address = items["affliateID__address"]
+                #affliate_address = items["affliateID__address"]
                 total_sum = sale_earnings + total_sum
-                item_detail = {"id": affliate_id, "sales_earnings":sale_earnings, "earning_duration":earning_duration,
-                "affliate_fullname":affliate_fullname, "sale_type": sale_type, "affliate_address":affliate_address,
+                item_detail = {"sales_earnings":sale_earnings, "earning_duration":earning_duration,
+                "affliate_fullname":affliate_fullname, "sale_type": sale_type,
                 }
                 items_detail.append(item_detail)
             #"total_earnings":affliate_total_earnings, "total_sales": len(items_detail)
-            item_detail.update({"total_earnings":total_sum})
-            item_detail.update({"total_sales":len(items_detail)})
+            totals.update({"total_earnings":total_sum})
+            totals.update({"total_sales":len(items_detail)})
+            items_detail.append(totals)
             responseData = {'data': items_detail, 'status': True}
         except Exception as e:
             responseData = {'message': str(e), 'status': True}
