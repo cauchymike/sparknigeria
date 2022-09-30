@@ -120,7 +120,7 @@ class AffliateDashboardView(APIView):
             responseData = affliate_data 
         except Exception as e:
             responseData = {'message': str(e), 'status': True}
-        return HttpResponse(json.dumps(responseData), content_type="application/json")
+        return HttpResponse(json.dumps(responseData, default=str), content_type="application/json")
 
 
 
