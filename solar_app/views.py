@@ -98,7 +98,8 @@ class AffliateDashboardView(APIView):
             items_detail = []
             total_sum = 0
             item_detail = {}
-            totals = {}
+            
+            affliate_data = {}
 
             
             for items in model:
@@ -114,10 +115,11 @@ class AffliateDashboardView(APIView):
                 }
                 items_detail.append(item_detail)
             #"total_earnings":affliate_total_earnings, "total_sales": len(items_detail)
-            totals.update({"total_earnings":total_sum})
-            totals.update({"total_sales":len(items_detail)})
-            items_detail.append(totals)
-            responseData = {'data': items_detail, 'status': True}
+            affliate_data["total_earnings"] = total_sum
+            affliate_data["total_sales"] = len(items_detail)
+            affliate_data["data"] = items_detail
+            affliate_data["status"] = True
+            responseData = affliate_data 
         except Exception as e:
             responseData = {'message': str(e), 'status': True}
         return HttpResponse(json.dumps(responseData), content_type="application/json")
