@@ -243,7 +243,7 @@ class BusinessInvestorLoginView(APIView):
             refresh = token['refresh']
             emailaddress = request.data['username']
             password = request.data['password']
-            record = BusinessInvestor.objects.filter(emailaddress=emailaddress).values("id"
+            record = BusinessInvestor.objects.filter(emailaddress=emailaddress).values("id",
             'emailaddress', 'firstname', 'lastname', 'companyname', 'country', 'phonenumber').first()
             
                 
