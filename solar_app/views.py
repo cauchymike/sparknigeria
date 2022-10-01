@@ -400,75 +400,66 @@ class PasswordRecovery(APIView):
         uid = force_str(urlsafe_base64_decode(userid))
         try:
             affliate = Affliates.objects.get(emailaddress=uid)
+            if affliate:
+                print('working')
+                password = make_password(
+                    request.data['password'], salt=None, hasher='default')
+                affliate.password = password
+                affliate.save(update_fields = ["password"])
+                responseData = {
+                'message': 'Password has been changed',
+                'status': True}
+                return HttpResponse(json.dumps(responseData), content_type="application/json")
         except Affliates.DoesNotExist:
             user = None
             responseData = {
                 'message': 'The record cannot be found',
                 'status': False
             }
+            return HttpResponse(json.dumps(responseData), content_type="application/json")
+        
         try:
             sponsor = Sponsor.objects.get(emailaddress = uid)
+            if sponsor:
+                sponsor = Sponsor.objects.get(emailaddress=uid)
+                password = make_password(
+                    request.data['password'], salt=None, hasher='default')
+                sponsor.password = password
+                sponsor.save(update_fileds = "password")
+                responseData = {
+                'message': 'Password changed',
+                'status': True}
+                return HttpResponse(json.dumps(responseData), content_type="application/json")
+            
         except Sponsor.DoesNotExist:
             sponsor = None
             responseData = {
                 'message': 'The record cannot be found',
                 'status': False
             }
+            return HttpResponse(json.dumps(responseData), content_type="application/json")
 
         try:
             business_investor = BusinessInvestor.objects.get(emailaddress = uid)
+            if business_investor:
+        
+                password = make_password(
+                    request.data['password'], salt=None, hasher='default')
+                business_investor.password = password
+                business_investor.save(update_fields = ["password"])
+                responseData = {
+                'message': 'Password has been changed',
+                'status': True
+                }
+                return HttpResponse(json.dumps(responseData), content_type="application/json")
         except BusinessInvestor.DoesNotExist:
             business_investor = None
             responseData = {
                 'message': 'The record cannot be found',
                 'status': False
             }
-
-        if business_investor:
-        
-            password = make_password(
-                request.data['password'], salt=None, hasher='default')
-            business_investor.password = password
-            business_investor.save(update_fields = ["password"])
-            responseData = {
-            'message': 'Password has been changed',
-            'status': True
-        }
             return HttpResponse(json.dumps(responseData), content_type="application/json")
             
-        if affliate:
-            print('working')
-            password = make_password(
-                request.data['password'], salt=None, hasher='default')
-            affliate.password = password
-            affliate.save(update_fields = ["password"])
-            responseData = {
-            'message': 'Password has been changed',
-            'status': True
-        }
-            return HttpResponse(json.dumps(responseData), content_type="application/json")
-        elif sponsor:
-            sponsor = Sponsor.objects.get(emailaddress=uid)
-            password = make_password(
-                request.data['password'], salt=None, hasher='default')
-            sponsor.password = password
-            sponsor.save(update_fileds = "password")
-            responseData = {
-            'message': 'Password changed',
-            'status': True
-        }
-            return HttpResponse(json.dumps(responseData), content_type="application/json")
-        
-
-
-
-
-
-
-
-
-
-
 
 #this function helps us generate access and refresh tokens
 def tokenGenerator():
