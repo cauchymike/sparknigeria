@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/affliates/',AllAffliatesView.as_view(), name='affliate_list'),
     path('api/salesearnings/',SaveEarninsView.as_view(), name='earnings'),
     path('api/dashboard/',AffliateDashboardView.as_view(), name='dashboard'),
+    path('api/pitchproject/',PitchProjectView.as_view(), name='pitchproject'),
 
 
 ]

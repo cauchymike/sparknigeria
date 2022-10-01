@@ -56,8 +56,6 @@ class SaveEarninsView(APIView):
             print(request.data['date_of_sale'])
             serializer = DashboardSerializer(data=request.data)
             if serializer.is_valid():
-                
-                
                 try:
                     valid_datetime = datetime.strptime(request.data['date_of_sale'], '%Y-%m-%d')
                     serializer.save(date_of_sale= valid_datetime)
@@ -459,6 +457,27 @@ class PasswordRecovery(APIView):
                 'status': False
             }
             return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+class PitchProjectView(APIView):
+    
+    def post(self, request, format=None):
+        try:
+        
+            serializer = PitchSerializer(data=request.data, many = True)
+            if serializer.is_valid():
+                serializer.save()
+                responseData = {'message': 'Pitch created successfully',
+                                'status': True}
+                return HttpResponse(json.dumps(responseData), content_type="application/json")
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            responseData = {'message': 'An error occurred' +
+                                       str(e), 'status': False}
+            return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+
+
             
 
 #this function helps us generate access and refresh tokens

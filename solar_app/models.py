@@ -1,3 +1,4 @@
+import email
 from django.db import models
 
 # Create your models here.
@@ -44,6 +45,25 @@ class Dashboard(models.Model):
         default=0, max_digits=16, decimal_places=2)
     earning_duration = models.CharField(max_length=45,null=True)
     affliateID = models.ForeignKey(Affliates,on_delete=models.CASCADE,null=True) 
+
+class Pitch(models.Model):
+    firstname = models.CharField(max_length=45,null=True)
+    lastname = models.CharField(max_length=45,null=True)
+    emailaddress = models.CharField(max_length=45,null=True,unique=True)
+    phonenumber = models.CharField(max_length=45,null=True)
+    city  = models.CharField(max_length=45,null=True)
+    no_of_users = models.DecimalField(
+        default=0, max_digits=16, decimal_places=2)
+    load_capacity = models.DecimalField(
+        default=0, max_digits=16, decimal_places=2)
+    extra_details = models.CharField(max_length=500,default="")
+    created_at = models.DateTimeField(
+        'created_at', auto_now_add=True, null=True)
+
+
+
+    
+
 
     
 
