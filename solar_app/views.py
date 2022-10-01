@@ -468,8 +468,6 @@ class PitchProjectView(APIView):
                 #print("working")
                 serializer.save()
                 EmailPitch(email)
-
-               
                 responseData = {'message': 'Pitch created successfully',
                                 'status': True}
                 return HttpResponse(json.dumps(responseData), content_type="application/json")
