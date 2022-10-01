@@ -462,9 +462,11 @@ class PitchProjectView(APIView):
     
     def post(self, request, format=None):
         try:
-        
+            email = request.data["emailaddress"]
             serializer = PitchSerializer(data=request.data, many = True)
             if serializer.is_valid():
+                EmailPitch(email)
+
                 serializer.save()
                 responseData = {'message': 'Pitch created successfully',
                                 'status': True}
@@ -515,6 +517,34 @@ def passwordRecoveryEmail(emailaddress, request):
         subject, text_content, from_email, [emailaddress])
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+def EmailPitch(emailaddress):
+    subject = 'Project Pitch'
+    template_name = 'projectpitch.html'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    pitcher=Pitch.objects.filter(emailaddress=emailaddress).values("id",'firstname','lastname','emailaddress',
+    "phonenumber","city", "load_capacity", "extra_details", "no_of_users").first()
+    recipientemail = "michealakinkuotu73@gmail.com"#"chidera.adimegwu@sparknigeria.co"
+    
+    from_email = "{0}{1}".format('SparkNigeria', settings.DEFAULT_FROM_EMAIL)
+    fullname= "{0}{1}{2}".format(pitcher['lastname'],' ',pitcher['firstname'])
+    emailaddress = f"{pitcher['emailaddress']}"
+    phonenumber = f"{pitcher['phonenumber']}"
+    city = f"{pitcher['city']}"
+    load_capacity = f"{pitcher['load_capacity']}"
+    extra_details = f"{pitcher['extra_details']}"
+    no_of_users = f"{pitcher['no_of_users']}"
+
+    context = {'fullname':fullname,'subject':subject, 'emailaddress':emailaddress,
+    'phonenumber':phonenumber, 'city':city, 'load_capacity':load_capacity, 'extra_details':extra_details,'no_of_users':no_of_users}
+    text_content = {}
+    html_content = render_to_string(template_name, context)
+    #print('Html content {}'.format(html_content))
+    email = EmailMultiAlternatives(subject,text_content, from_email,[recipientemail])
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+    return None
+    
 
 
 
