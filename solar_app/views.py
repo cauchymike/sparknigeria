@@ -463,10 +463,12 @@ class PitchProjectView(APIView):
     def post(self, request, format=None):
         try:
             email = request.data["emailaddress"]
-            serializer = PitchSerializer(data=request.data, many = True)
+            
+            serializer = PitchSerializer(data=request.data)
             if serializer.is_valid():
-                #print("working")
+                
                 serializer.save()
+                
                 EmailPitch(email)
                 responseData = {'message': 'Pitch created successfully',
                                 'status': True}
@@ -524,9 +526,9 @@ def EmailPitch(emailaddress):
     from_email = settings.DEFAULT_FROM_EMAIL
     pitcher=Pitch.objects.filter(emailaddress=emailaddress).values("id",'firstname','lastname','emailaddress',
     "phonenumber","city", "load_capacity", "extra_details", "no_of_users").first()
-    recipientemail = "michealakinkuotu73@gmail.com"#"chidera.adimegwu@sparknigeria.co"
+    recipientemail ="chidera.adimegwu@sparknigeria.co"
     
-    from_email = "{0}{1}".format('SparkNigeria', settings.DEFAULT_FROM_EMAIL)
+    from_email = "{0}".format(settings.DEFAULT_FROM_EMAIL)
     fullname= "{0}{1}{2}".format(pitcher['lastname'],' ',pitcher['firstname'])
     emailaddress = f"{pitcher['emailaddress']}"
     phonenumber = f"{pitcher['phonenumber']}"

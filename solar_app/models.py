@@ -49,13 +49,12 @@ class Dashboard(models.Model):
 class Pitch(models.Model):
     firstname = models.CharField(max_length=45,null=True)
     lastname = models.CharField(max_length=45,null=True)
-    emailaddress = models.CharField(max_length=45,null=True,unique=True)
+    emailaddress = models.CharField(max_length=45,null=True)
     phonenumber = models.CharField(max_length=45,null=True)
     city  = models.CharField(max_length=45,null=True)
     no_of_users = models.DecimalField(
         default=0, max_digits=16, decimal_places=2)
-    load_capacity = models.DecimalField(
-        default=0, max_digits=16, decimal_places=2)
+    load_capacity =  models.CharField(max_length=50,default="")
     extra_details = models.CharField(max_length=500,default="")
     created_at = models.DateTimeField(
         'created_at', auto_now_add=True, null=True)
