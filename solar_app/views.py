@@ -337,7 +337,7 @@ class RecoverAffliatePassword(APIView):
             checkemail = None
         
         if checkemail:
-           passwordRecoveryEmail(emailaddress, request)
+           AffliatepasswordRecoveryEmail(emailaddress, request)
            responseData = {'message': 'Please check your email', 'status': True}
         else:
             responseData = {'message': 'Email address not found', 'status': False}
@@ -502,6 +502,23 @@ def duplicateEmails(model,useremailaddress):
         return False
     else:
         return True
+
+def AffliatepasswordRecoveryEmail(emailaddress, request):
+    subject = 'Password Recovery'
+    template_name = 'password_recovery.html'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    kwargs = {"uidb64": urlsafe_base64_encode(
+        force_bytes(emailaddress))}
+    text_content = {}
+    host = settings.APP_URL
+    activate_url = "{0}://{1}/{2}{3}".format(
+        request.scheme, host, 'affliate_reset/reset/?token=', urlsafe_base64_encode(force_bytes(emailaddress)))
+    context = {'activate_url': activate_url}
+    html_content = render_to_string(template_name, context)
+    email = EmailMultiAlternatives(
+        subject, text_content, from_email, [emailaddress])
+    email.attach_alternative(html_content, "text/html")
+    email.send()
 
 def passwordRecoveryEmail(emailaddress, request):
     subject = 'Password Recovery'
