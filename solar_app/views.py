@@ -512,7 +512,7 @@ def AffliatepasswordRecoveryEmail(emailaddress, request):
     text_content = {}
     host = settings.APP_URL
     activate_url = "{0}://{1}/{2}{3}".format(
-        request.scheme, host, 'affliate_reset/?token=', urlsafe_base64_encode(force_bytes(emailaddress)))
+        request.scheme, host, 'affliate_reset.html?token=', urlsafe_base64_encode(force_bytes(emailaddress)))
     context = {'activate_url': activate_url}
     html_content = render_to_string(template_name, context)
     email = EmailMultiAlternatives(
