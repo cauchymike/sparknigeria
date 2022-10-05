@@ -37,6 +37,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1', 'sparknigeria.herokuapp.com']
 
 APP_URL = environ.get('APP_URL')
+RESET_PASSWORD_URL = environ.get('RESET_PASSWORD_URL')
 
 
 # Application definition

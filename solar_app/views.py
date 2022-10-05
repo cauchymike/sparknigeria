@@ -510,7 +510,7 @@ def AffliatepasswordRecoveryEmail(emailaddress, request):
     kwargs = {"uidb64": urlsafe_base64_encode(
         force_bytes(emailaddress))}
     text_content = {}
-    host = settings.APP_URL
+    host = settings.RESET_PASSWORD_URL
     activate_url = "{0}://{1}/{2}{3}".format(
         request.scheme, host, 'affliate_reset.html?token=', urlsafe_base64_encode(force_bytes(emailaddress)))
     context = {'activate_url': activate_url}
